@@ -47,8 +47,8 @@ mkdir $pastaEnabled
 # >> adicionando as pastas ao grupo de usuario Apache <<
 chown -R apache:apache "$pastaPublic"
 chown -R apache:apache "$pastaModulo"
-chwon -R apache:apache "$pastaAvailable"
-chwon -R apache:apache "$pastaEnabled"
+chown -R apache:apache "$pastaAvailable"
+chown -R apache:apache "$pastaEnabled"
 chmod -R 755 $pastaWWW
 chmod -R 755 $pastaPublic
 chmod -R 755 $pastaModulo
@@ -61,11 +61,11 @@ cp $arquivoConfigAPACHE $pastaAPACHE/httpd.conf_old
 echo $addConfigAPACHE >> $arquivoConfigAPACHE
 
 # >> Criando o arquivo de configuração do VirtualHost <<
-echo CONFIG > "$arquivoConfigVIRTUALHOST"
+echo $CONFIG > "$arquivoConfigVIRTUALHOST"
 
 # Criar link simbolico do arquivo de configuração do VirtualHost <<
-ls -s $pastaAvailable/$nomeVIRTUALHOST.conf $pastaEnabled/$nomeVIRTUALHOST.conf
-ls -lah $pastaEnabled/$nomeVIRTUALHOST.conf
+ln -s $pastaAvailable/$nomeVirtualHost.conf $pastaEnabled/$nomeVirtualHost.conf
+ls -lah $pastaEnabled/$nomeVirtualHost.conf
 
 # >> reiniciar serviço do apache <<
 systemctl stop httpd.service
