@@ -6,11 +6,11 @@
 # procedimentos conforme o site  https://letsencrypt.org/ e https://certbot.eff.org/
 
 # >> Instalações Necessárias <<
-yum install certbot python2-certbot-apache -y # CentOS 7
-dnf install certbot python3-certbot-apache -y # CentOS 8
+yum install certbot python2-certbot-apache -y			# CentOS 7
+dnf install certbot python3-certbot-apache -y			# CentOS 8
 
-certbot --apache        # obter e instalar o certificado https
-# certbot certonly --apache       # obter apenas o certificado https
+certbot --apache						# obter e instalar o certificado https
+# certbot certonly --apache					# obter apenas o certificado https
 
 # CentOS 7
 echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew -q" | sudo tee -a /etc/crontab > /dev/null
@@ -18,8 +18,8 @@ echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random
 # CentOS 8
 echo "0 0,12 * * * root python3 -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew -q" | sudo tee -a /etc/crontab > /dev/null
 
-certbot --apache        # obter e instalar o certificado https
-# certbot certonly --apache       # obter apenas o certificado https
+certbot --apache						# obter e instalar o certificado https
+# certbot certonly --apache					# obter apenas o certificado https
 
 
 # >> Configuração do FireWall <<
