@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Copyright (c) 2020 CodeBreaker.com.br
+#
+# Este script visa instalar os programas nesserários e realizar as configurações mínimas
+# para a criação de um WebServer básico na distribuição RedHat CentOS.
+
+clear								# limpar tela
+
+# >> Atualizar repositórios do Linux <<
+yum clean all							# Limpar os repositórios
+yum makecache fast || yum makecache				# carregar repositórios CentOS 7 ou 8
+yum update -y							# Verificar e instalar atualizações
+
+# >> Instalação dos programas necessários
+yum install firewalld -y					# instalar a segurança de rede FIREWALLD
+
+# >> Instalação do LAMP (Linux, Apache, MySQL, PHP) - WebServer <<
+yum install httpd -y						# instalar o Apache HTTPD
+yum install mariadb-server -y					# instalar Banco de Dados MARIADB
+yum install mariadb -y						# instalar Bando de Dados MARIADB
+yum install php -y						# instalar acesso ao PHP
+yum install php-mysql -y					# instalar acesso ao PHP com MYSQL
+yum install php-mysqlnd -y					# instalar acesso ao PHP com MYSQL
+
+# >> Atualizar repositórios do Linux
+yum clean all							# Limpar os repositórios
+yum makecache fast || yum makecache				# carregar repositórios CentOS 7 ou 8
+yum update -y							# Verificar e instalar atualizações
+
+clear								# limpar tela
+
+# >> Configuração dos serviços <<
+systemctl enable firewalld.service				# habilitar serviço ao reiniciar (FIREWALLD)
+systemctl enable httpd.service					# habilitar serviço ao reiniciar (HTTPD)
+service firewalld.service start					# iniciar serviço (FIREWALLD)
+service httpd.service start					# iniciar serviço (HTTPD)
+
+# >> Configuração do FireWall <<
+firewall-cmd --permanent --zone=public --add-port=80/tcp	# adicionar porta publica
+firewall-cmd --reload && reboot					# reiniciar firewall e reiniciar
+

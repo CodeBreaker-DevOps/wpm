@@ -1,0 +1,74 @@
+#!bin/bash
+
+# Copyright (c) 2020 CodeBreaker.com.br
+#
+# Este script visa configurar o VirtualHost no Apache
+
+# >> Variaveis <<
+nomeVirtualHost=$1						# primeiro parametro de dados
+pastaWWW="/var/www"						# pasta www padrão do Apache
+VIRTUALHOST=$pastaWWW/$nomeVirtualHost				# pasta do Virtual Host
+
+pastaPublic=$VIRTUALHOST/public_html				# pasta publica no Virtual Host
+pastaModulo=$pastaPublic/modulo					# pasta de instalações dos módulos
+
+pastaAPACHE=/etc/httpd						# pasta de configuração do apache
+pastaAvailable=$pastaAPACHE/sites-available			# pasta de configuração do Virtual Host
+pastaEnabled=$pastaAPACHE/sites-enabled				# pasta de configuração do Virtual Host
+
+arquivoConfigAPACHE=$pastaAPACHE/conf/httpd.conf		# arquivo de configuração do Apache
+arquivoConfigVIRTUALHOST=$pastaAvailable/$nomeVirtualHost.conf	# arquivo de configuração do VirutalHost
+
+addConfigAPACHE="IncludeOptional sites-enabled/*.conf"		# enxergar arquivos de conf do VirtualHost
+
+URL=$2								# segundo parametro de dados
+
+# >> Criando os diretórios
+mkdir $VIRTUALHOST
+mkdir $pastaPublic
+mkdir $pastaModulo
+mkdir $pastaAvailable
+mkdir $pastaEnabled
+
+# >> adicionando as pastas ao grupo de usuario Apache <<
+chown -R apache:apache "$pastaPublic"
+chown -R apache:apache "$pastaModulo"
+chown -R apache:apache "$pastaAvailable"
+chown -R apache:apache "$pastaEnabled"
+chmod -R 755 $pastaWWW
+chmod -R 755 $pastaPublic
+chmod -R 755 $pastaModulo
+
+
+# >> criar cópia de segurança do arquivo de configuração do apache <<
+cp $arquivoConfigAPACHE $pastaAPACHE/httpd.conf_old
+
+# >> adicionar comando no arquivo de configuração do apache <<
+echo $addConfigAPACHE >> $arquivoConfigAPACHE
+
+# >> Criando o arquivo de configuração do VirtualHost <<
+echo "<VirtualHost *:80>
+ServerName www.$URL
+ServerAlias $URL
+DocumentRoot $pastaPublic
+<Directory $pastaModulo >
+AllowOverride All
+</Directory>
+</VirtualHost>
+
+<VirtualHost *:443>
+DocumentRoot $pastaPublic
+ServerName $URL:443
+ServerAlias www.$URL:443
+</VirtualHost>" > $arquivoConfigVIRTUALHOST
+
+
+# Criar link simbolico do arquivo de configuração do VirtualHost <<
+ln -s $pastaAvailable/$nomeVirtualHost.conf $pastaEnabled/$nomeVirtualHost.conf
+ls -lah $pastaEnabled/$nomeVirtualHost.conf
+
+# >> reiniciar serviço do apache <<
+systemctl stop httpd.service
+systemctl start httpd.service
+systemctl restart httpd.service
+
