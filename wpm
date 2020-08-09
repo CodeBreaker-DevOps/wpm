@@ -1,0 +1,18 @@
+#!bin/bash
+
+# Copyright (c) 2020 CodeBreaker.com.br
+#
+# Este Script tem por objetivo servir como intermediário para a execução dos outros scripts específicos
+
+# >> variáveis <<
+PASTA_CORRENTE=$(pwd)
+PASTA_SCRIPT=$1
+SCRIPT=$2
+PARAMETRO_1=$3
+PARAMETRO_2=$4
+PAREAMETRO_3=$5
+PARAMETRO_4=$6
+PARAMETRO_5=$7
+
+# >> Executar intermediação de scripts <<
+sh $PASTA_CORRENTE/scripts/$PASTA_SCRIPT/$SCRIPT $PARAMETRO_1 $PARAMETRO_2 $PARAMETRO_3 $PARAMETRO_4 $PARAMETRO_5
