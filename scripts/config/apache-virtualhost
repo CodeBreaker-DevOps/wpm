@@ -5,23 +5,23 @@
 # Este script visa configurar o VirtualHost no Apache
 
 # >> Variaveis <<
-nomeVirtualHost=$1
-pastaWWW="/var/www"
-VIRTUALHOST=$pastaWWW/$nomeVirtualHost
+nomeVirtualHost=$1						# primeiro parametro de dados
+pastaWWW="/var/www"						# pasta www padrão do Apache
+VIRTUALHOST=$pastaWWW/$nomeVirtualHost				# pasta do Virtual Host
 
-pastaPublic=$VIRTUALHOST/public_html
-pastaModulo=$pastaPublic/modulo
+pastaPublic=$VIRTUALHOST/public_html				# pasta publica no Virtual Host
+pastaModulo=$pastaPublic/modulo					# pasta de instalações dos módulos
 
-pastaAPACHE=/etc/httpd
-pastaAvailable=$pastaAPACHE/sites-available
-pastaEnabled=$pastaAPACHE/sites-enabled
+pastaAPACHE=/etc/httpd						# pasta de configuração do apache
+pastaAvailable=$pastaAPACHE/sites-available			# pasta de configuração do Virtual Host
+pastaEnabled=$pastaAPACHE/sites-enabled				# pasta de configuração do Virtual Host
 
-arquivoConfigAPACHE=$pastaAPACHE/conf/httpd.conf
-arquivoConfigVIRTUALHOST=$pastaAvailable/$nomeVirtualHost.conf
+arquivoConfigAPACHE=$pastaAPACHE/conf/httpd.conf		# arquivo de configuração do Apache
+arquivoConfigVIRTUALHOST=$pastaAvailable/$nomeVirtualHost.conf	# arquivo de configuração do VirutalHost
 
-addConfigAPACHE="IncludeOptional sites-enabled/*.conf"
+addConfigAPACHE="IncludeOptional sites-enabled/*.conf"		# enxergar arquivos de conf do VirtualHost
 
-URL=$2
+URL=$2								# segundo parametro de dados
 
 # >> Criando os diretórios
 mkdir $VIRTUALHOST
