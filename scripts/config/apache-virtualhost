@@ -1,0 +1,36 @@
+#!bin/bash
+
+# Copyright (c) 2020 CodeBreaker.com.br
+#
+# Este script visa configurar o VirtualHost no Apache
+
+# >> Variaveis <<
+nomeVirtualHost=$1
+pastaWWW="/var/www"
+VIRTUALHOST=$pastaWWW/$nomeVirtualHost
+
+pastaPublic=$VIRTUALHOST/public_html
+pastaModulo=$pastaPublic/modulo
+
+pastaAPACHE=/etc/httpd
+pastaAvailable=$pastaAPACHE/sites-available
+pastaEnabled=$pastaAPACHE/sites-enabled
+
+arquivoConfigAPACHE=$pastaAPACHE/httpd.conf
+arquivoConfigVIRTUALHOST=$pastaAvailable/$nomeVIRTUALHOST.conf
+
+URL=$2
+CONFIG="<VirtualHost *:80>
+ServerName www.$URL
+ServerAlias $URL
+DocumentRoot $pastaPublic
+<Directory $pastaModulo >
+AllowOverride All
+</Directory>
+</VirtualHost>
+
+<VirtualHost *:443>
+DocumentRoot $pastaPublic
+ServerName $URL:443
+ServerAlias www.$URL:443
+</VirtualHost>"
