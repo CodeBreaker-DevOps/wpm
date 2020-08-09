@@ -3,3 +3,5 @@
 yum install git -y<br>
 cd /opt<br>
 git clone https://github.com/CodeBreaker-DevOps/wpm.git
+cd /opt/wpm/
+
