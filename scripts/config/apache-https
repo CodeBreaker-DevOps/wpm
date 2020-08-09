@@ -5,6 +5,8 @@
 # Este Script tem por objetivo habilitar gratuitamente o acesso via HTTPS, sendo necessário utilizar os
 # procedimentos conforme o site  https://letsencrypt.org/ e https://certbot.eff.org/
 
+clear								# limpar janela
+
 # >> Instalações Necessárias <<
 yum install certbot python2-certbot-apache -y			# CentOS 7
 dnf install certbot python3-certbot-apache -y			# CentOS 8
