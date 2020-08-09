@@ -16,26 +16,12 @@ pastaAPACHE=/etc/httpd
 pastaAvailable=$pastaAPACHE/sites-available
 pastaEnabled=$pastaAPACHE/sites-enabled
 
-arquivoConfigAPACHE=$pastaAPACHE/httpd.conf
-arquivoConfigVIRTUALHOST=$pastaAvailable/$nomeVIRTUALHOST.conf
+arquivoConfigAPACHE=$pastaAPACHE/conf/httpd.conf
+arquivoConfigVIRTUALHOST=$pastaAvailable/$nomeVirtualHost.conf
 
 addConfigAPACHE="IncludeOptional sites-enabled/*.conf"
 
 URL=$2
-CONFIG="<VirtualHost *:80>
-ServerName www.$URL
-ServerAlias $URL
-DocumentRoot $pastaPublic
-<Directory $pastaModulo >
-AllowOverride All
-</Directory>
-</VirtualHost>
-
-<VirtualHost *:443>
-DocumentRoot $pastaPublic
-ServerName $URL:443
-ServerAlias www.$URL:443
-</VirtualHost>"
 
 # >> Criando os diretórios
 mkdir $VIRTUALHOST
@@ -61,7 +47,21 @@ cp $arquivoConfigAPACHE $pastaAPACHE/httpd.conf_old
 echo $addConfigAPACHE >> $arquivoConfigAPACHE
 
 # >> Criando o arquivo de configuração do VirtualHost <<
-echo $CONFIG > "$arquivoConfigVIRTUALHOST"
+echo "<VirtualHost *:80>
+ServerName www.$URL
+ServerAlias $URL
+DocumentRoot $pastaPublic
+<Directory $pastaModulo >
+AllowOverride All
+</Directory>
+</VirtualHost>
+
+<VirtualHost *:443>
+DocumentRoot $pastaPublic
+ServerName $URL:443
+ServerAlias www.$URL:443
+</VirtualHost>" > $arquivoConfigVIRTUALHOST
+
 
 # Criar link simbolico do arquivo de configuração do VirtualHost <<
 ln -s $pastaAvailable/$nomeVirtualHost.conf $pastaEnabled/$nomeVirtualHost.conf
