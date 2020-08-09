@@ -19,6 +19,8 @@ pastaEnabled=$pastaAPACHE/sites-enabled
 arquivoConfigAPACHE=$pastaAPACHE/httpd.conf
 arquivoConfigVIRTUALHOST=$pastaAvailable/$nomeVIRTUALHOST.conf
 
+addConfigAPACHE="IncludeOptional sites-enabled/*.conf"
+
 URL=$2
 CONFIG="<VirtualHost *:80>
 ServerName www.$URL
@@ -34,3 +36,39 @@ DocumentRoot $pastaPublic
 ServerName $URL:443
 ServerAlias www.$URL:443
 </VirtualHost>"
+
+# >> Criando os diretórios
+mkdir $VIRTUALHOST
+mkdir $pastaPublic
+mkdir $pastaModulo
+mkdir $pastaAvailable
+mkdir $pastaEnabled
+
+# >> adicionando as pastas ao grupo de usuario Apache <<
+chown -R apache:apache "$pastaPublic"
+chown -R apache:apache "$pastaModulo"
+chwon -R apache:apache "$pastaAvailable"
+chwon -R apache:apache "$pastaEnabled"
+chmod -R 755 $pastaWWW
+chmod -R 755 $pastaPublic
+chmod -R 755 $pastaModulo
+
+
+# >> criar cópia de segurança do arquivo de configuração do apache <<
+cp $arquivoConfigAPACHE $pastaAPACHE/httpd.conf_old
+
+# >> adicionar comando no arquivo de configuração do apache <<
+echo $addConfigAPACHE >> $arquivoConfigAPACHE
+
+# >> Criando o arquivo de configuração do VirtualHost <<
+echo CONFIG > "$arquivoConfigVIRTUALHOST"
+
+# Criar link simbolico do arquivo de configuração do VirtualHost <<
+ls -s $pastaAvailable/$nomeVIRTUALHOST.conf $pastaEnabled/$nomeVIRTUALHOST.conf
+ls -lah $pastaEnabled/$nomeVIRTUALHOST.conf
+
+# >> reiniciar serviço do apache <<
+systemctl stop httpd.service
+systemctl start httpd.service
+systemctl restart httpd.service
+
