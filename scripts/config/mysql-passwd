@@ -1,0 +1,1 @@
+mysqladmin -u $USERNAME_SQL password $NEW_PASSWD
